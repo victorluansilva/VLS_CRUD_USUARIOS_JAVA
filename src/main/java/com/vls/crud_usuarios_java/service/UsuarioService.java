@@ -53,4 +53,7 @@ public class UsuarioService {
     public List<Usuario> listarUsuarios() {
         return usuarios;
     }
+
+    public void excluirUsuario(Usuario usuario) {
+    }
 }

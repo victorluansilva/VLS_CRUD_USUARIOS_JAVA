@@ -5,11 +5,9 @@ import com.vls.crud_usuarios_java.service.UsuarioService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 
 public class UserListController {
 
@@ -66,7 +64,24 @@ public class UserListController {
     }
 
     public void adicionarBotoesDeAcao(){
+        colAcoes.setCellFactory(pram -> new TableCell<>() {
+           private final Button btnEditar = new Button("Editar");
+           private final Button btnExcluir = new Button("Excluir");
+           private final HBox panel = new HBox(5,btnEditar,btnExcluir);
+            {
+                btnEditar.setOnAction(event ->{
+                    Usuario usuario = getTableView().getItems().get(getIndex());
+                    abrirFormularioUsuario(usuario);
+                });
+                btnExcluir.setOnAction(event ->{
+                    Usuario usuario = getTableView().getItems().get(getIndex());
+                    usuarioService.excluirUsuario(usuario);
+                    carregarDadosTabela();
+                });
+            }
 
+
+        });
     }
 
     @FXML
@@ -74,7 +89,7 @@ public class UserListController {
 
     }
 
-    public void abrirFormularioUsuario(){
+    public void abrirFormularioUsuario(Usuario usuario){
 
     }
 

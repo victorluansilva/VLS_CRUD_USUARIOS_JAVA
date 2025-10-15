@@ -45,3 +45,11 @@ VALUES ("Ciclano","LoginCiclano","123456"),
 SELECT * FROM usuarios;
 
 ```
+
+## CONFIGURAÇÃO DO `.env`
+
+```
+DB_URL=jdbc:mysql://localhost:3306/crud_usuarios_java
+DB_USER=root
+DB_PASSWORD=Senai2022
+```
