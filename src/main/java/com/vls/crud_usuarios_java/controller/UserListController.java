@@ -1,13 +1,20 @@
 package com.vls.crud_usuarios_java.controller;
 
+import com.vls.crud_usuarios_java.MainApplication;
 import com.vls.crud_usuarios_java.model.Usuario;
 import com.vls.crud_usuarios_java.service.UsuarioService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class UserListController {
 
@@ -79,18 +86,31 @@ public class UserListController {
                     carregarDadosTabela();
                 });
             }
-
-
+            @Override
+            protected void updateItem(Void item, boolean empty){
+                super.updateItem(item,empty);
+                setGraphic(empty ? null : panel);
+            }
         });
     }
-
     @FXML
-    public void handleAdicionarUsuario(){
-
+    public void handleAdicionarUsuario() {
+     abrirFormularioUsuario(null);
     }
-
     public void abrirFormularioUsuario(Usuario usuario){
-
+        try{
+            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("user-form-view.fxml"));
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(loader.load()));
+            UserFormController controller = loader.getController();
+            controller.setUsuario(usuario);
+            controller.setStage(stage);
+            stage.showAndWait();
+            carregarDadosTabela();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
 }

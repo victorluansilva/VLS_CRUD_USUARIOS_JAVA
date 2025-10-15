@@ -35,8 +35,8 @@ public class UserFormController {
     private UsuarioService usuarioService;
 
     public void initialize(){    }
-    public void setStage(){    }
-    public void setUsuario(){    }
+    public void setStage(Stage stage){    }
+    public void setUsuario(Usuario usuario){    }
     @FXML
     public void handleSalvar(){    }
 
