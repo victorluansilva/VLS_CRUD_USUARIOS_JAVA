@@ -1,6 +1,8 @@
 package com.vls.crud_usuarios_java.service;
 
 import com.vls.crud_usuarios_java.model.Usuario;
+import javafx.scene.chart.PieChart;
+import javafx.scene.control.Alert;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -80,7 +82,31 @@ public class UsuarioService {
     //INICIO - UPDATE
 
     public void atualizarUsuario(Usuario usuario){
-        for
+        for (int i = 0; i < usuarios.size(); i++) {
+            if (usuarios.get(i).getId() == usuario.getId()){
+                usuarios.set(i,usuario);
+                break;
+            }
+        }
+        if (usuario.getId() > 0){
+            showAlert("Operação em Memória", "Usuário atualizado na sessão local.");
+            return;
+        }
+
+        String sql = "UPDATE usuarios SET nome = ?, sobrenome = ?, email = ?, login = ? WHERE id = ?";
+        try(Connection conn = DatabaseService.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setString(1,usuario.getNome());
+            stmt.setString(2,usuario.getSobrenome());
+            stmt.setString(3,usuario.getEmail());
+            stmt.setString(4,usuario.getEndereco());
+            stmt.setInt(5,usuario.getId());
+            stmt.executeUpdate();
+        }catch (SQLException e){
+            showAlert("Operação em Memória", "Usuário atualizado na sessão local.");
+        }
+
     }
 
     //FIM - UPDATE
@@ -90,5 +116,13 @@ public class UsuarioService {
 
     public void sincronizarComBanco() {
 
+    }
+
+    public void showAlert(String title, String message){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
