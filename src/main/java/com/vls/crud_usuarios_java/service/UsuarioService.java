@@ -58,5 +58,6 @@ public class UsuarioService {
     }
 
     public void sincronizarComBanco() {
+
     }
 }
