@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UsuarioService {
 
@@ -114,8 +115,39 @@ public class UsuarioService {
     public void excluirUsuario(Usuario usuario) {
     }
 
-    public void sincronizarComBanco() {
+    //METODO PARA SINCRONIZAR COM O BANCO
 
+    public void sincronizarComBanco() {
+        if (!DatabaseService.testarConexao()){
+            showAlert("Sincronização falhou","Não foi possível reconectar com o banco de dados.");
+            return;
+        }
+        List<Usuario> usuariosParaSync = usuarios.stream().
+                filter(u -> u.getId() < 0).collect(Collectors.toList());
+
+        if (!usuariosParaSync.isEmpty()){
+            String sql = "INSERT INTO usuarios (nome, sobrenome, email, login) VALUES (?,?,?,?)";
+            int okCount = 0;
+            try (Connection conn = DatabaseService.getConnection()) {
+                for (Usuario user : usuariosParaSync) {
+                    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                        stmt.setString(1, user.getNome());
+                        stmt.setString(2, user.getSobrenome());
+                        stmt.setString(3, user.getEmail());
+                        stmt.setString(4, user.getLogin());
+                        stmt.executeUpdate();
+                        okCount++;
+                    }
+                }
+                showAlert("Sincronizado!", okCount + "usuarios foram sincronizados no banco de dados.");
+            } catch (SQLException e) {
+                showAlert("Erro na sincronização", "Nem todos os dados foram salvos.");
+                e.printStackTrace();
+            }
+        }else{
+            showAlert("Reconectado","Conexão com o banco foi reestabelecida.");
+        }
+        carregarUsuarioDoBanco();
     }
 
     public void showAlert(String title, String message){
