@@ -56,4 +56,7 @@ public class UsuarioService {
 
     public void excluirUsuario(Usuario usuario) {
     }
+
+    public void sincronizarComBanco() {
+    }
 }

@@ -2,6 +2,7 @@ package com.vls.crud_usuarios_java.controller;
 
 import com.vls.crud_usuarios_java.MainApplication;
 import com.vls.crud_usuarios_java.model.Usuario;
+import com.vls.crud_usuarios_java.service.DatabaseService;
 import com.vls.crud_usuarios_java.service.UsuarioService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -48,15 +49,29 @@ public class UserListController {
     }
 
     public void atualizarStatusConexao(){
-
+        boolean isConnected = DatabaseService.testarConexao();
+        if (isConnected){
+            statusLabel.setText("DB Status: connected");
+            statusLabel.setStyle("-fx-text-fill: green");
+            syncButton.setText("refresh");
+            syncButton.setDisable(true);
+            syncButton.setVisible(false);
+        } else{
+            statusLabel.setText("DB Status: offline");
+            statusLabel.setStyle("-fx-text-fill: red");
+            syncButton.setText("retry");
+            syncButton.setDisable(false);
+            syncButton.setVisible(true);
+        }
     }
     @FXML
     public void handleSincronizar(){
+        usuarioService.sincronizarComBanco();
+        carregarDadosTabela();
 
     }
 
     public void carregarDadosTabela(){
-        if (usuarioService.isDbloaded()) {
             colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
             colSobrenome.setCellValueFactory(new PropertyValueFactory<>("sobrenome"));
             colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
@@ -65,9 +80,8 @@ public class UserListController {
 
             obsUsuario = FXCollections.observableArrayList(usuarioService.listarUsuarios());
             tableView.setItems(obsUsuario);
-        } else{
-            System.out.println("Dados não foram carregados.");
-        }
+            adicionarBotoesDeAcao();
+            atualizarStatusConexao();
     }
 
     public void adicionarBotoesDeAcao(){
