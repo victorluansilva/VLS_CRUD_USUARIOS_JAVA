@@ -2,12 +2,16 @@ package com.vls.crud_usuarios_java.controller;
 
 import com.vls.crud_usuarios_java.model.Usuario;
 import com.vls.crud_usuarios_java.service.UsuarioService;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
+import java.time.ZoneId;
+import java.util.Date;
 
 public class UserFormController {
 
@@ -34,11 +38,56 @@ public class UserFormController {
     private Usuario usuario;
     private UsuarioService usuarioService;
 
-    public void initialize(){    }
-    public void setStage(Stage stage){    }
-    public void setUsuario(Usuario usuario){    }
+    public void initialize(){
+        usuarioService = new UsuarioService();
+        sexoChoiceBox.setItems(FXCollections.observableArrayList("Masculino","Feminino"));
+    }
+    public void setStage(Stage stage){
+        this.stage = stage;
+    }
+    public void setUsuario(Usuario usuario){
+        this.usuario = usuario;
+
+        if (usuario != null){
+            titleLabel.setText("Editar Usuário");
+            nomeField.setText(usuario.getNome());
+            sobrenomeField.setText(usuario.getSobrenome());
+            emailField.setText(usuario.getEmail());
+            loginField.setText(usuario.getLogin());
+            if (usuario.getDataNascimento() != null){
+                dataNascimentoPicker.setValue(usuario.getDataNascimento().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+            }
+            telefoneField.setText(usuario.getTelefone());
+            sexoChoiceBox.setValue(usuario.getSexo() == 'M'?"Masculino":"Feminino");
+            enderecoField.setText(usuario.getEndereco());
+        } else {
+            titleLabel.setText("Adicionar Usuário");
+        }
+    }
     @FXML
-    public void handleSalvar(){    }
+    public void handleSalvar(){
+        boolean isNew = (usuario == null);
+        if (isNew){
+            usuario = new Usuario();
+        }
+        usuario.setNome(nomeField.getText());
+        usuario.setSobrenome(sobrenomeField.getText());
+        usuario.setEmail(emailField.getText());
+        usuario.setLogin(loginField.getText());
+        if (dataNascimentoPicker.getValue() != null){
+            usuario.setDataNascimento(Date.from(dataNascimentoPicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        }
+        usuario.setTelefone(telefoneField.getText());
+        usuario.setEndereco(enderecoField.getText());
+        if (sexoChoiceBox.getValue() != null){
+            usuario.setSexo(sexoChoiceBox.getValue().equals("Masculino")?'M':'F');
+        }
+        if(isNew){
+            usuarioService.adicionarUsuario(usuario);
+        } else {
+            usuarioService.atualizarUsuario(usuario);
+        }
+    }
 
 
 }
