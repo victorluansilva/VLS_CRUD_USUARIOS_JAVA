@@ -25,10 +25,8 @@
     <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="colNome" prefWidth="200.0" text="Nome"/>
-            <TableColumn fx:id="colLogin" prefWidth="180.0" text="Login"/>
-<!--            <TableColumn fx:id="colTelefone" prefWidth="180.0" text="Telefone"/>-->
-<!--            <TableColumn fx:id="colSobrenome" prefWidth="150.0" text="Sobrenome"/>-->
-<!--            <TableColumn fx:id="colEmail" prefWidth="180.0" text="Email"/>-->
+            <TableColumn fx:id="colLogin" prefWidth="150.0" text="Login"/>
+            <TableColumn fx:id="colIdade" prefWidth="100.0" text="Idade"/>
             <TableColumn fx:id="colAcoes" minWidth="180.0" text="Ações"/>
         </columns>
     </TableView>

@@ -10,6 +10,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
@@ -55,7 +57,7 @@ public class UserFormController {
             emailField.setText(usuario.getEmail());
             loginField.setText(usuario.getLogin());
             if (usuario.getDataNascimento() != null){
-                dataNascimentoPicker.setValue(usuario.getDataNascimento().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                dataNascimentoPicker.setValue(usuario.getDataNascimento());
             }
             telefoneField.setText(usuario.getTelefone());
             sexoChoiceBox.setValue(usuario.getSexo() == 'M'?"Masculino":"Feminino");
@@ -75,7 +77,7 @@ public class UserFormController {
         usuario.setEmail(emailField.getText());
         usuario.setLogin(loginField.getText());
         if (dataNascimentoPicker.getValue() != null){
-            usuario.setDataNascimento(Date.from(dataNascimentoPicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            usuario.setDataNascimento(LocalDate.from(dataNascimentoPicker.getValue()));
         }
         usuario.setTelefone(telefoneField.getText());
         usuario.setEndereco(enderecoField.getText());
