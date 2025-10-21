@@ -63,7 +63,8 @@ public class UsuarioService {
                 usuario.setSobrenome(rs.getString("sobrenome"));
                 usuario.setEmail(rs.getString("email"));
                 usuario.setLogin(rs.getString("login"));
-                usuario.setDataNascimento(rs.getDate("dataNascimento").toLocalDate());
+                boolean isDataNascNull = (rs.getDate("dataNascimento").toLocalDate() == null);
+                if (!isDataNascNull) usuario.setDataNascimento(rs.getDate("dataNascimento").toLocalDate());
                 usuario.setIdade();
                 usuario.setTelefone(rs.getString("telefone"));
                 usuario.setSexo(rs.getString("sexo") != null ? rs.getString("sexo").charAt(0) : ' ');
