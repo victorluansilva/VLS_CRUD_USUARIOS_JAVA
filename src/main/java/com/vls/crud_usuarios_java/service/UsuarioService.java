@@ -113,8 +113,17 @@ public class UsuarioService {
 
     //FIM - UPDATE
 
+    // INICIO - DELETE
+
     public void excluirUsuario(Usuario usuario) {
+        usuarios.remove(usuario);
+        if(usuario.getId() < 0){
+            showAlert("Operação na memória local", "Sessão offline");
+        }
+        // Falta deletar no banco de dados
     }
+
+    // FIM - DELETE
 
     //METODO PARA SINCRONIZAR COM O BANCO
 

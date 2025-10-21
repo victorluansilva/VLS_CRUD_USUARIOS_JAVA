@@ -29,5 +29,5 @@ public class DatabaseService {
         }
     }
 
-
+    public void testeConnection(){}
 }
