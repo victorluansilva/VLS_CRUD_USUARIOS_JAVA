@@ -22,6 +22,7 @@ public class UserFormController {
     @FXML private ChoiceBox<String> sexoChoiceBox;
     @FXML private TextField enderecoField;
 
+
     private Stage stage;
     private Usuario usuario;
     private UsuarioService usuarioService;
@@ -81,5 +82,6 @@ public class UserFormController {
         }
 
         stage.close();
+
     }
 }
